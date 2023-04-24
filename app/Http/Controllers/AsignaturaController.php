@@ -10,45 +10,81 @@ class AsignaturaController extends Controller
     public function index()
     {
         $asignaturas = Asignatura::all();
-
-        return response()->json([
-            'asignaturas' => $asignaturas
-        ]);
+        return response()->json($asignaturas);
     }
 
     public function show($id)
     {
-        $asignatura = Asignatura::findOrFail($id);
-
-        return response()->json([
-            'asignatura' => $asignatura
-        ]);
+        $asignatura = Asignatura::find($id);
+        if (!$asignatura) {
+            return response()->json(['error' => 'Asignatura no encontrada'], 404);
+        }
+        return response()->json($asignatura);
     }
 
     public function store(Request $request)
     {
-        $asignatura = Asignatura::create($request->all());
+        $request->validate([
+            'nombre' => 'required|string',
+            'creditos' => 'required|integer',
+            'docente' => 'required|string',
+            'prerrequisito' => 'nullable|string',
+            'horas_autonomas' => 'required|integer',
+            'horas_dirigidas' => 'required|integer'
+        ]);
 
-        return response()->json([
-            'asignatura' => $asignatura
-        ], 201);
+        $asignatura = new Asignatura([
+            'nombre' => $request->nombre,
+            'creditos' => $request->creditos,
+            'docente' => $request->docente,
+            'prerrequisito' => $request->prerrequisito,
+            'horas_autonomas' => $request->horas_autonomas,
+            'horas_dirigidas' => $request->horas_dirigidas
+        ]);
+
+        $asignatura->save();
+
+        return response()->json($asignatura, 201);
     }
 
     public function update(Request $request, $id)
     {
-        $asignatura = Asignatura::findOrFail($id);
-        $asignatura->update($request->all());
+        $asignatura = Asignatura::find($id);
+        if (!$asignatura) {
+            return response()->json(['error' => 'Asignatura no encontrada'], 404);
+        }
 
-        return response()->json([
-            'asignatura' => $asignatura
-        ], 200);
+        $request->validate([
+            'nombre' => 'required|string',
+            'creditos' => 'required|integer',
+            'docente' => 'required|string',
+            'prerrequisito' => 'nullable|string',
+            'horas_autonomas' => 'required|integer',
+            'horas_dirigidas' => 'required|integer'
+        ]);
+
+        $asignatura->nombre = $request->nombre;
+        $asignatura->creditos = $request->creditos;
+        $asignatura->docente = $request->docente;
+        $asignatura->prerrequisito = $request->prerrequisito;
+        $asignatura->horas_autonomas = $request->horas_autonomas;
+        $asignatura->horas_dirigidas = $request->horas_dirigidas;
+
+        $asignatura->save();
+
+        return response()->json($asignatura);
     }
 
     public function destroy($id)
     {
-        $asignatura = Asignatura::findOrFail($id);
+        $asignatura = Asignatura::find($id);
+        if (!$asignatura) {
+            return response()->json(['error' => 'Asignatura no encontrada'], 404);
+        }
+
         $asignatura->delete();
 
-        return response()->json(null, 204);
+        return response()->json(['message' => 'Asignatura eliminada correctamente']);
     }
+
 }

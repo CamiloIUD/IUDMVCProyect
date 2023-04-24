@@ -17,4 +17,9 @@ class Asignatura extends Model
         'horas_trabajo_autonomo',
         'horas_trabajo_dirigido',
     ];
+
+    public function prerrequisito()
+    {
+        return $this->belongsTo(Asignatura::class, 'prerrequisito');
+    }
 }

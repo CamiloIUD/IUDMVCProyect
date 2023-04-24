@@ -23,14 +23,22 @@ Route::delete('/categories/{id}', 'CategoryController@destroy');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-
-    
+    Route::post('/asignaturas', [AsignaturaController::class, 'store']);
+    Route::put('/asignaturas/{id}', [AsignaturaController::class, 'update']);
+    Route::delete('/asignaturas/{id}', [AsignaturaController::class, 'destroy']); 
 });
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('asignaturas', AsignaturaController::class)->except([
         'create', 'edit'
     ]);
+    Route::get('/asignaturas', [AsignaturaController::class, 'index']);
+    Route::get('/asignaturas/{id}', [AsignaturaController::class, 'show']);
+    Route::post('/asignaturas', [AsignaturaController::class, 'store']);
+    Route::put('/asignaturas/{id}', [AsignaturaController::class, 'update']);
+    Route::delete('/asignaturas/{id}', [AsignaturaController::class, 'destroy']);
+    Route::get('/asignaturas', [AsignaturaController::class, 'index']);
+    Route::get('/asignaturas/{id}', [AsignaturaController::class, 'show']);
 });
 
 Route::get('asignaturas', [AsignaturaController::class, 'index']);

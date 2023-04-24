@@ -112,4 +112,43 @@ return [
 
     'password_timeout' => 10800,
 
+    'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+    
+        'sanctum' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',
+        ],
+    
+        'coordinador' => [
+            'driver' => 'sanctum',
+            'provider' => 'coordinadores',
+        ],
+    
+        'estudiante' => [
+            'driver' => 'sanctum',
+            'provider' => 'estudiantes',
+        ],
+    ],
+
+    'providers' => [
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+    
+        'coordinadores' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Coordinador::class,
+        ],
+    
+        'estudiantes' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Estudiante::class,
+        ],
+    ],
+
 ];
